@@ -103,15 +103,22 @@
   body.dark .quizOption { background:#3498db; color:white; }
   body.dark .quizOption:hover { background:#2980b9; }
   
-  .polaroid {
-  position: absolute;
+  #memoryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.polaroid {
   width: 150px;
   background: white;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0,0,0,0.2);
   text-align: center;
-  transition: all 0.6s ease;
+  transition: all 0.4s ease;
 }
 
 .polaroid img {
@@ -180,39 +187,38 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
-  const memories = [
-    {img:"images/poto1.jpg", caption:"I wanna recreate this shot😄"},
-    {img:"images/poto2.jpg", caption:"I want to be the sun"},
-    {img:"images/poto3.jpg", caption:"Tumharii ankhe👀💗"},
-    {img:"images/poto4.jpg", caption:"Tumhari psychopath wali ankhe👀"},
-    {img:"images/poto5.jpg", caption:"Hamarii ankhee👀"} // special one
-  ];
+ const memories = [
+  {img:"images/poto1.jpg", caption:"I wanna recreate this shot😄"},
+  {img:"images/poto2.jpg", caption:"I want to be the sun"},
+  {img:"images/poto3.jpg", caption:"Tumharii ankhe👀💗"},
+  {img:"images/poto4.jpg", caption:"Tumhari psychopath wali ankhe👀"},
+  {img:"images/poto5.jpg", caption:"Hamarii ankhee👀"} // special one
+];
 
-  const cameraEmoji = document.getElementById("cameraEmoji");
-  const memoryContainer = document.getElementById("memoryContainer");
-  let currentMemory = 0;
+const cameraEmoji = document.getElementById("cameraEmoji");
+const memoryContainer = document.getElementById("memoryContainer");
+let currentMemory = 0;
 
-  cameraEmoji.addEventListener("click", () => {
-    if (currentMemory >= memories.length) return; // stop if all shown
+cameraEmoji.addEventListener("click", () => {
+  if (currentMemory >= memories.length) return; // stop if all shown
 
-    const mem = memories[currentMemory];
-    const polaroid = document.createElement("div");
-    polaroid.classList.add("polaroid");
-    polaroid.style.top = Math.random() * 120 + "px";
-    polaroid.style.left = Math.random() * 350 + "px";
-    polaroid.style.transform = `scale(0.5) rotate(${Math.random()*20-10}deg)`;
-    polaroid.style.opacity = 0;
-    polaroid.innerHTML = `<img src="${mem.img}" alt="memory"><p>${mem.caption}</p>`;
-    memoryContainer.appendChild(polaroid);
+  const mem = memories[currentMemory];
+  const polaroid = document.createElement("div");
+  polaroid.classList.add("polaroid");
+  polaroid.style.position = "relative"; // important for grid flow
+  polaroid.innerHTML = `<img src="${mem.img}" alt="memory"><p>${mem.caption}</p>`;
+  memoryContainer.appendChild(polaroid);
 
-    // Animate in
-    setTimeout(() => {
-      polaroid.style.opacity = 1;
-      polaroid.style.transform = `scale(1) rotate(${Math.random()*20-10}deg)`;
-    }, 50);
+  // Small "pop in" animation
+  polaroid.style.opacity = 0;
+  polaroid.style.transform = "scale(0.5) rotate(-3deg)";
+  setTimeout(() => {
+    polaroid.style.opacity = 1;
+    polaroid.style.transform = "scale(1) rotate(0deg)";
+  }, 50);
 
-    currentMemory++;
-  });
+  currentMemory++;
+});
   // Theme toggle
   function toggleTheme() { document.body.classList.toggle("dark"); }
 
