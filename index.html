@@ -77,9 +77,24 @@
   .panel { display: none; padding: 10px 15px; border-left: 3px solid #ff6b6b; margin-bottom: 10px; }
   body.dark .panel { border-left: 3px solid #f39c12; }
 
-  .keychain { display: flex; justify-content: center; gap: 20px; margin-top: 20px; position: relative; height: 60px; }
-  .keychain span { font-size: 3rem; cursor: pointer; position: absolute; transition: transform 0.2s; }
-  .keychain span:hover { transform: scale(1.3); }
+  
+   .keychain {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .keychain span {
+      font-size: 3rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .keychain span:hover {
+      transform: scale(1.3);
+    }
+
 
   .heart {
     font-size: 2.5rem;
@@ -167,10 +182,10 @@ Agge ka check krne ke baad hi padhna.</p></div>
   </div>
 
   <!-- Keychain Mini-Game -->
-  <div class="keychain">
-    <span id="sun" style="left:50px; top:0px;">🌞</span>
-    <span id="moon" style="left:150px; top:0px;">🌙</span>
-  </div>
+   <div class="keychain">
+      <span onclick="alert('This is u my SUN 🌞 — always lighting my world!')">🌞</span>
+      <span onclick="alert('This is the MOON 🌙 — waiting to be with you!')">🌙</span>
+    </div>
 
   <!-- Clickable Heart -->
   <div class="heart" id="heart">❤️</div>
@@ -280,41 +295,6 @@ cameraEmoji.addEventListener("click", () => {
     alert("💡 Secret Hint: Take the FIRST LETTER of each result line from 0 to 6 marks and arrange them vertically, Example:if u get 3 marks(3 out of 6 | Looks like you’re trying, I’ll give you credit 😅) the Letter to take here is 'L', Once u got the message text me that💌");
   });
 
-  // Draggable Sun & Moon
-  function makeDraggable(el){
-    const container = document.querySelector('.card');
-    let offsetX=0, offsetY=0;
-
-    el.addEventListener('mousedown', dragStart);
-
-    function dragStart(e){
-      e.preventDefault();
-      offsetX = e.clientX - el.offsetLeft;
-      offsetY = e.clientY - el.offsetTop;
-      document.addEventListener('mousemove', dragMove);
-      document.addEventListener('mouseup', dragEnd);
-    }
-
-    function dragMove(e){
-      e.preventDefault();
-      let x = e.clientX - offsetX;
-      let y = e.clientY - offsetY;
-
-      x = Math.max(0, Math.min(container.clientWidth - el.clientWidth, x));
-      y = Math.max(0, Math.min(container.clientHeight - el.clientHeight, y));
-
-      el.style.left = x + "px";
-      el.style.top = y + "px";
-    }
-
-    function dragEnd(){
-      document.removeEventListener('mousemove', dragMove);
-      document.removeEventListener('mouseup', dragEnd);
-    }
-  }
-
-  makeDraggable(document.getElementById("sun"));
-  makeDraggable(document.getElementById("moon"));
 
   // Clickable Heart
   const heart=document.getElementById("heart");
