@@ -6,6 +6,14 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  /* Hearts style */
+.fallingHeart {
+  position: absolute;
+  font-size: 24px;
+  user-select: none;
+  pointer-events: none;
+}
+
   #dareWheelContainer, #truthContainer {
   margin-top: 15px;
 }
@@ -351,6 +359,17 @@ Agge ka check krne ke baad hi padhna.</p></div>
     <button id="nextTruth" class="quizOption" style="display:none;">Next</button>
   </div>
 </div>
+  <!-- Catch the Falling Hearts Game Accordion -->
+<button class="accordion">💘 Catch the Hearts</button>
+<div class="panel" style="text-align:center; padding:20px;">
+  <p>Move the basket with ⬅️ and ➡️ keys or swipe on mobile to catch the falling hearts ❤️</p>
+  <div id="heartGameContainer" style="position:relative; width:300px; height:400px; margin:0 auto; border:2px solid #ff6b6b; border-radius:10px; overflow:hidden; background:#fff;">
+    <div id="basket" style="position:absolute; bottom:10px; left:130px; width:40px; height:40px; background:#ff6b6b; border-radius:10px;"></div>
+    <p id="heartScore" style="position:absolute; top:10px; left:10px; font-weight:bold;">Score: 0</p>
+  </div>
+  <p id="heartResult" style="font-weight:bold; margin-top:10px; color:#ff6b6b;"></p>
+</div>
+
 
 
 
@@ -390,6 +409,103 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
+  // Catch the Falling Hearts Game (Fixed + Mobile Friendly)
+(function(){
+  const container = document.getElementById("heartGameContainer");
+  const basket = document.getElementById("basket");
+  const scoreDisplay = document.getElementById("heartScore");
+  const resultDisplay = document.getElementById("heartResult");
+
+  let basketX = 130;
+  const basketWidth = 40;
+  let score = 0;
+  let hearts = [];
+  let gameActive = true;
+  const maxScore = 10; // Winning condition
+
+  // Move basket with arrow keys
+  function moveBasket(x){
+    basketX = Math.max(0, Math.min(300 - basketWidth, x));
+    basket.style.left = basketX + "px";
+  }
+
+  window.addEventListener("keydown", (e)=>{
+    if(!gameActive) return;
+    if(e.key === "ArrowLeft"){ moveBasket(basketX - 20); }
+    if(e.key === "ArrowRight"){ moveBasket(basketX + 20); }
+  });
+
+  // Mobile touch controls (drag basket)
+  let touchStartX = null;
+  container.addEventListener("touchstart", (e)=>{
+    touchStartX = e.touches[0].clientX;
+  });
+  container.addEventListener("touchmove", (e)=>{
+    if(!gameActive || touchStartX === null) return;
+    const touchX = e.touches[0].clientX;
+    const delta = touchX - touchStartX;
+    moveBasket(basketX + delta);
+    touchStartX = touchX;
+    e.preventDefault();
+  });
+  container.addEventListener("touchend", ()=>{ touchStartX = null; });
+
+  // Create falling heart
+  function createHeart(){
+    if(!gameActive) return;
+    const heart = document.createElement("div");
+    heart.classList.add("fallingHeart");
+    heart.style.left = Math.floor(Math.random()*260) + "px";
+    heart.style.top = "-30px"; // start from top
+    heart.innerText = "❤️";
+    container.appendChild(heart);
+    hearts.push(heart);
+
+    // Animate
+    let fallInterval = setInterval(()=>{
+      if(!gameActive){ clearInterval(fallInterval); heart.remove(); return; }
+      const heartTop = parseInt(heart.style.top);
+      heart.style.top = (heartTop + 5) + "px";
+
+      // Check collision with basket
+      const heartLeft = parseInt(heart.style.left);
+      const heartRight = heartLeft + 24;
+      const basketRight = basketX + basketWidth;
+
+      if(heartTop + 24 >= 370 && heartTop + 24 <= 410){ // near bottom
+        if(heartRight > basketX && heartLeft < basketRight){
+          score++;
+          scoreDisplay.innerText = "Score: " + score;
+          heart.remove();
+          clearInterval(fallInterval);
+          hearts = hearts.filter(h => h !== heart);
+
+          // Check win
+          if(score >= maxScore){
+            resultDisplay.innerText = "💖 You fell in love with me! 💖";
+            gameActive = false;
+            hearts.forEach(h=>h.remove());
+            hearts=[];
+          }
+        }
+      }
+
+      // Remove if it falls below
+      if(heartTop > 400){
+        heart.remove();
+        clearInterval(fallInterval);
+        hearts = hearts.filter(h => h !== heart);
+      }
+    }, 50);
+  }
+
+  // Spawn hearts every 1 second
+  const heartSpawner = setInterval(()=>{
+    if(gameActive) createHeart();
+    else clearInterval(heartSpawner);
+  }, 1000);
+})();
+
   // ========== Truth or Dare ==========
 const truthBtn = document.getElementById("truthBtn");
 const dareBtn = document.getElementById("dareBtn");
