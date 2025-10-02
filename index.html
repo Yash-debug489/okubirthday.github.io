@@ -235,6 +235,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
   
   
   </div>
+  <h3 style="text-align:center; color:#ff4b5c;">🎮Silly Games</h3>
   <button class="accordion">🎡 Spin the Wheel</button>
 <div class="panel" style="text-align:center; padding:20px; position:relative;">
   <!-- Wheel container -->
@@ -421,7 +422,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
   let score = 0;
   let hearts = [];
   let gameActive = true;
-  const maxScore = 10; // Winning condition
+  const maxScore = 7; // Winning condition
 
   // Move basket with arrow keys
   function moveBasket(x){
@@ -482,7 +483,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
 
           // Check win
           if(score >= maxScore){
-            resultDisplay.innerText = "💖 You fell in love with me! 💖";
+            resultDisplay.innerText = "💖 Tumne mere itne sare dil chura liya, now ur in love with me! ";
             gameActive = false;
             hearts.forEach(h=>h.remove());
             hearts=[];
