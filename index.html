@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Include TweenMax first -->
+<script src="js/TweenMax.min.js"></script>
+<!-- Include Winwheel -->
+<script src="js/Winwheel.js"></script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You 💖</title>
@@ -165,7 +169,12 @@ Agge ka check krne ke baad hi padhna.</p></div>
 
   <button class="accordion">💌 Memories & Calls</button>
   <div class="panel"><p>I hope u got it. Iske do piece hai[sun and moon] the second[moon] is with me. I gave u the sun because u light up my world even from a far. I think maine bas negative aspects bataye haii mere 11, 12th ke but lets lighten up the mood, u know how dull life is for a jee aspirant(especially ppl like me jo 11th se suru kiye hai), its not very happening, don't get me wrong i liked it(the thrill of solving questions , the fun in learning)..but then u came along , we again started talking in class 12 and let me tell u those calls, were a source of happiness for me..u wouldn't believe it but in class 12 around October i think i used to wait for ur call every evening and bht baar hua tha kii i didn't slept in the afternoon  not only because ki mujhe padhna haii but also kyuki if i did i would miss ur call(if u did call that day). Then the day before my JEE mains first attempt (21 January night), u called me..That time i was alone in my hotel room , in pitch darkness , the only sound being of my own heart, beating so fast i thought i would die. But then suddenly after a month(i guess) u called me , made me laugh and during the call i felt calm , i forgot mera kal JEE hai[woh alag baat hai after the call , i again wasn't able to sleep bcz of my anxiety 😂]. Ur my SUN, i hope that little keychain would remind u of me , abt how much i care abt u and how much i love u. Make sure to bring it with u the next time we meet.</p></div>
-
+<button class="accordion">🎡 Spin the Wheel</button>
+<div class="panel" style="text-align:center;">
+  <canvas id="wheelCanvas" width="300" height="300"></canvas>
+  <button id="spinBtn" style="margin-top:10px;">SPIN</button>
+  <p id="wheelResult" style="margin-top:10px; font-weight:bold;"></p>
+</div>
   <!-- Friendship Quiz -->
   <button class="accordion">🎓Sawal jawab</button>
   <div class="panel" style="text-align:center;">
@@ -202,6 +211,33 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
+  // Wheel setup
+const wheel = new Winwheel({
+  'canvasId'    : 'wheelCanvas',
+  'numSegments' : 6,
+  'segments'    : [
+    {'fillStyle':'#ff6b6b', 'text':'Prize 1'},
+    {'fillStyle':'#f39c12', 'text':'Prize 2'},
+    {'fillStyle':'#1abc9c', 'text':'Prize 3'},
+    {'fillStyle':'#3498db', 'text':'Prize 4'},
+    {'fillStyle':'#9b59b6', 'text':'Prize 5'},
+    {'fillStyle':'#e74c3c', 'text':'Prize 6'}
+  ],
+  'animation'   : {
+      'type'     : 'spinToStop',
+      'duration' : 5,
+      'spins'    : 8,
+      'callbackFinished' : (segment) => {
+          document.getElementById('wheelResult').innerText = `🎉 You got: ${segment.text}!`;
+          triggerConfetti();
+      }
+  }
+});
+
+// Spin button
+document.getElementById('spinBtn').addEventListener('click', ()=>{
+  wheel.startAnimation();
+});
  const memories = [
   {img:"images/poto1.jpg", caption:"I wanna recreate this shot😄"},
   {img:"images/poto2.jpg", caption:"I want to be the sun"},
