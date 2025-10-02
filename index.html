@@ -281,7 +281,8 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
-  const results = [
+// Prize definitions
+const results = [
   { prize: 'Prize 1 🎁', meaning: 'Kiss me 😘' },
   { prize: 'Prize 2 🎉', meaning: 'Hug me 🤗' },
   { prize: 'Prize 3 🍰', meaning: 'Eat cake 🎂' },
@@ -290,35 +291,41 @@ Agge ka check krne ke baad hi padhna.</p></div>
   { prize: 'Prize 6 💖', meaning: 'Love you 💌' }
 ];
 
+// DOM elements
 const spinBtn = document.getElementById('spinBtn');
 const wheel = document.getElementById('wheel');
 const resultDisplay = document.getElementById('wheelResult');
 const meaningDisplay = document.getElementById('wheelMeaning');
 
-let spinning = false;
+let spinning = false; // flag to prevent multiple spins
 
 spinBtn.addEventListener('click', () => {
-  if(spinning) return;
+  if (spinning) return; // ignore clicks during spin
   spinning = true;
 
-  const randomDeg = Math.floor(Math.random() * 360);
-  const spins = Math.floor(Math.random() * 4) + 5;
+  // Generate random spin
+  const randomDeg = Math.floor(Math.random() * 360); // 0–359°
+  const spins = Math.floor(Math.random() * 4) + 5;   // 5–8 full spins
   const rotationThisSpin = spins * 360 + randomDeg;
 
+  // Apply smooth spin
   wheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
   wheel.style.transform = `rotate(${rotationThisSpin}deg)`;
 
+  // After spin ends
   wheel.addEventListener('transitionend', function handler() {
-    const normalized = rotationThisSpin % 360;
-    const segment = Math.floor(normalized / 60);
+    const normalized = rotationThisSpin % 360;          // normalize to 0-360
+    const segment = Math.floor(normalized / 60);       // 6 segments
 
-    const result = results[5 - segment]; // clockwise mapping
+    const result = results[5 - segment];              // clockwise mapping
     resultDisplay.innerText = `You got: ${result.prize}`;
     meaningDisplay.innerText = result.meaning;
 
-    // Reset wheel visually
-    wheel.style.transition = '';
-    spinning = false;
+    // Reset wheel visually for next spin without slowdown
+    wheel.style.transition = 'none';
+    wheel.style.transform = `rotate(${normalized}deg)`; 
+
+    spinning = false; // allow next spin
     wheel.removeEventListener('transitionend', handler);
   });
 });
