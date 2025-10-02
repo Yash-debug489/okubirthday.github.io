@@ -6,6 +6,10 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  #dareWheelContainer, #truthContainer {
+  margin-top: 15px;
+}
+
 #tttBoard {
   display: grid;
   grid-template-columns: repeat(3, 100px);
@@ -304,6 +308,50 @@ Agge ka check krne ke baad hi padhna.</p></div>
   </div>
 
 </div>
+  <button class="accordion">🎲 Truth or Dare</button>
+<div class="panel" style="text-align:center;">
+  <p>Choose your challenge:</p>
+  <div style="display:flex; justify-content:center; gap:20px; margin-bottom:15px;">
+    <button id="truthBtn" class="quizOption">Truth</button>
+    <button id="dareBtn" class="quizOption">Dare</button>
+  </div>
+
+  <!-- Dare Wheel -->
+  <div id="dareWheelContainer" style="display:none; text-align:center; position:relative;">
+    <div style="position:relative; width:200px; height:200px; margin:0 auto;">
+      <div id="dareWheel" style="
+          width:200px; height:200px; border-radius:50%;
+          background: conic-gradient(
+            #ff6b6b 0deg 60deg,
+            #ff9a9e 60deg 120deg,
+            #fad0c4 120deg 180deg,
+            #f39c12 180deg 240deg,
+            #f9d5e5 240deg 300deg,
+            #6a5acd 300deg 360deg
+          );
+          transition: transform 4s ease-out;
+      "></div>
+      <!-- Pointer -->
+      <div style="
+          width:0; height:0;
+          border-left:10px solid transparent;
+          border-right:10px solid transparent;
+          border-top:20px solid black;
+          position:absolute; top:-10px; left:50%;
+          transform:translateX(-50%); z-index:2;
+      "></div>
+    </div>
+    <button id="spinDareBtn" style="margin-top:10px;" class="quizOption">Spin Dare!</button>
+    <p id="dareResult" style="margin-top:10px; font-weight:bold;"></p>
+  </div>
+
+  <!-- Truth Reaction -->
+  <div id="truthContainer" style="display:none;">
+    <p id="truthPrompt" style="font-weight:bold; margin-bottom:10px;"></p>
+    <button id="nextTruth" class="quizOption" style="display:none;">Next</button>
+  </div>
+</div>
+
 
 
   <!-- Friendship Quiz -->
@@ -342,6 +390,95 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
+  // ========== Truth or Dare ==========
+const truthBtn = document.getElementById("truthBtn");
+const dareBtn = document.getElementById("dareBtn");
+const dareWheelContainer = document.getElementById("dareWheelContainer");
+const truthContainer = document.getElementById("truthContainer");
+const dareWheel = document.getElementById("dareWheel");
+const spinDareBtn = document.getElementById("spinDareBtn");
+const dareResult = document.getElementById("dareResult");
+const truthPrompt = document.getElementById("truthPrompt");
+const nextTruth = document.getElementById("nextTruth");
+
+// Dare list
+const dares = [
+  "Send me your silliest selfie 😜",
+  "Record a 5-sec happy dance 🕺💃",
+  "Say one thing only in emojis for 1 min 📱😎",
+  "Sing your favorite line from a song 🎶",
+  "Text me a secret no one knows 😏",
+  "Do a funny pose and send a pic 🤪"
+];
+
+// Truth prompts (personal / interactive)
+const truths = [
+  "Remember the first time we met? Describe it in 3 emojis 😄",
+  "Pick an emoji that represents me 🥰",
+  "What's your happiest memory from last month? 🌸",
+  "Which song makes you think of us? 🎶",
+  "Share a cute secret no one knows 😏"
+];
+
+let currentTruth = 0;
+
+// Show Dare
+dareBtn.addEventListener("click", () => {
+  dareWheelContainer.style.display = "block";
+  truthContainer.style.display = "none";
+  dareResult.innerText = "";
+});
+
+// Show Truth
+truthBtn.addEventListener("click", () => {
+  dareWheelContainer.style.display = "none";
+  truthContainer.style.display = "block";
+  currentTruth = 0;
+  truthPrompt.innerText = truths[currentTruth];
+  nextTruth.style.display = "inline-block";
+});
+
+// Spin Dare Wheel
+spinDareBtn.addEventListener("click", () => {
+  const randomDeg = Math.floor(Math.random() * 360);
+  const spins = Math.floor(Math.random() * 5) + 5;
+  const rotation = spins * 360 + randomDeg;
+
+  dareWheel.style.transition = "transform 4s cubic-bezier(0.33, 1, 0.68, 1)";
+  dareWheel.style.transform = `rotate(${rotation}deg)`;
+
+  dareWheel.addEventListener("transitionend", function handler() {
+    const normalized = rotation % 360;
+    const segment = Math.floor(normalized / 60);
+    const dareIndex = 5 - segment;
+    const dareText = dares[dareIndex];
+    dareResult.innerText = `Your dare: ${dareText}`;
+
+    // Confetti
+    confetti({
+      particleCount: 80,
+      spread: 60,
+      origin: { y: 0.6 },
+      emojis: ["🎉","🥳","😜","💖"]
+    });
+
+    dareWheel.style.transition = "none";
+    dareWheel.style.transform = `rotate(${normalized}deg)`;
+    dareWheel.removeEventListener("transitionend", handler);
+  });
+});
+
+// Truth Next
+nextTruth.addEventListener("click", () => {
+  currentTruth++;
+  if(currentTruth >= truths.length){
+    truthPrompt.innerText = "All done! Hope you enjoyed 🙂";
+    nextTruth.style.display = "none";
+  } else {
+    truthPrompt.innerText = truths[currentTruth];
+  }
+});
+
   // ===== Tic Tac Toe =====
 const board = Array(9).fill("");
 let currentPlayer = "X";
