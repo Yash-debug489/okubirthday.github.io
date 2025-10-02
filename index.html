@@ -198,6 +198,52 @@ Agge ka check krne ke baad hi padhna.</p></div>
   
   
   </div>
+  <button class="accordion">🎡 Spin the Wheel</button>
+<div class="panel" style="text-align:center; padding:20px; position:relative;">
+  <!-- Wheel container -->
+  <div style="position:relative; width:250px; height:250px; margin:0 auto;">
+    
+<!-- Pointer inside wheel container -->
+<div style="
+    width:0; height:0;
+    border-left:15px solid transparent;
+    border-right:15px solid transparent;
+    border-top:30px solid black;  /* changed color to black */
+    position:absolute;
+    top:-15px;  /* adjust so it sits above the wheel */
+    left:50%;
+    transform:translateX(-50%);
+    z-index:2;
+"></div>
+
+    <!-- Wheel itself -->
+    <div id="wheel" style="
+        width:250px; height:250px; border-radius:50%; 
+        background: conic-gradient(
+          #ff6b6b 0deg 60deg,
+          #ff9a9e 60deg 120deg,
+          #fad0c4 120deg 180deg,
+          #f39c12 180deg 240deg,
+          #f9d5e5 240deg 300deg,
+          #6a5acd 300deg 360deg
+        );
+        transition: transform 4s ease-out;
+    "></div>
+
+  </div>
+
+  <!-- Spin Button -->
+  <button id="spinBtn" style="
+      margin-top:20px; padding:10px 20px; border-radius:10px; 
+      background:#ff6b6b; color:white; border:none; cursor:pointer; font-weight:bold;
+  ">Spin!</button>
+
+  <!-- Result -->
+<p id="wheelResult" style="margin-top:15px; font-weight:bold; font-size:1.1rem;"></p>
+
+<!-- Prize Meaning -->
+<p id="wheelMeaning" style="margin-top:5px; font-style:italic; color:#555;"></p>
+</div>
 
   <!-- Friendship Quiz -->
   <button class="accordion">🎓Sawal jawab</button>
@@ -235,6 +281,47 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
+  const results = [
+  { prize: 'Prize 1 🎁', meaning: 'Kiss me 😘' },
+  { prize: 'Prize 2 🎉', meaning: 'Hug me 🤗' },
+  { prize: 'Prize 3 🍰', meaning: 'Eat cake 🎂' },
+  { prize: 'Prize 4 🥳', meaning: 'Party time 🥳' },
+  { prize: 'Prize 5 🌟', meaning: 'Make a wish 🌠' },
+  { prize: 'Prize 6 💖', meaning: 'Love you 💌' }
+];
+
+const spinBtn = document.getElementById('spinBtn');
+const wheel = document.getElementById('wheel');
+const resultDisplay = document.getElementById('wheelResult');
+const meaningDisplay = document.getElementById('wheelMeaning');
+
+let spinning = false;
+
+spinBtn.addEventListener('click', () => {
+  if(spinning) return;
+  spinning = true;
+
+  const randomDeg = Math.floor(Math.random() * 360);
+  const spins = Math.floor(Math.random() * 4) + 5;
+  const rotationThisSpin = spins * 360 + randomDeg;
+
+  wheel.style.transition = 'transform 4s cubic-bezier(0.33, 1, 0.68, 1)';
+  wheel.style.transform = `rotate(${rotationThisSpin}deg)`;
+
+  wheel.addEventListener('transitionend', function handler() {
+    const normalized = rotationThisSpin % 360;
+    const segment = Math.floor(normalized / 60);
+
+    const result = results[5 - segment]; // clockwise mapping
+    resultDisplay.innerText = `You got: ${result.prize}`;
+    meaningDisplay.innerText = result.meaning;
+
+    // Reset wheel visually
+    wheel.style.transition = '';
+    spinning = false;
+    wheel.removeEventListener('transitionend', handler);
+  });
+});
     const sticker = document.getElementById('birthdaySticker');
 
   sticker.addEventListener('click', () => {
