@@ -4,6 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For You 💖</title>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
   body {
     margin: 0;
@@ -157,7 +158,33 @@
   <h1>Happy Birthday Okuu 💫</h1>
 
   <button class="accordion">🎉 Birthday wishes</button>
-  <div class="panel"><p>Happy birthday Bestie 🥳🥳💞. Wase the word OKU in japanese means the inner or deep part of something and calling u OKU means ur my "Inner person" , someone very close to my heart.Happy birthday yrr tum hamesa khush raho , ur so adorable , so so cute..Just be happy,stay calm.U can count on me i'm always here, whenever u feel like it call me,  text me , blast my phone , teri marji [wase i know u already do this, batane ka jarurat nii hai] ..I love u so so much🫂🫂..This gift is my effort to put a smile on ur face and to make u feel special which i hopped i did. I hope safely reach kr gyaa hoo, wase i couriered it on 30 September because i feared late na ho jaye , kyuki beech me sat , sun tha and also festive season so i spent the whole night of 29sep making this because i really wanted to make something special, u mean a lot to me, love u bae🥹🥹.It's ur 18th birthday and tumhari phutti kismat toh dekho next day test🥲🥲. I hope padh li ho , ur chill nd serious now, right? That's my girl.</p></div>
+  <div class="panel"><p>Happy birthday Bestie 🥳🥳💞. Wase the word OKU in japanese means the inner or deep part of something and calling u OKU means ur my "Inner person" , someone very close to my heart.Happy birthday yrr tum hamesa
+    khush raho , ur so adorable , so so cute..Just be happy,stay calm.U can count on me I'm 
+    always here, whenever u feel like it call me,  text me , blast my phone , teri marji [wase i know u already do this, batane ka jarurat nii hai] ..I love u so so much🫂🫂..
+    This gift is my effort to put a smile on ur face and to make u feel special which i
+    hopped i did. I hope safely reach kr gyaa hoo, wase i couriered it on 30 September because i feared late na ho jaye , 
+    kyuki beech me sat , sun tha and also festive season so i spent the whole night of 29sep making this because i really wanted to make something special,
+    u mean a lot to me, love u bae🥹🥹.It's ur 18th birthday and tumhari phutti kismat toh dekho next day test🥲🥲. I hope padh li ho , ur chill nd serious now, right? That's my girl.</p>
+    <p>   </p>
+    <p>Wase click kr ke dekh niche button ko</p>
+     <div id="birthdaySticker" style="
+      display:inline-block;
+      background: #ff6b6b;
+      color:white;
+      padding:15px 25px;
+      border-radius:20px;
+      font-weight:bold;
+      cursor:pointer;
+      text-align:center;
+      margin-top:15px;
+      transition: transform 0.2s;
+  ">
+    🎉 Happy Birthday! 🎉
+  </div>
+  
+  
+  
+  </div>
 
   <button class="accordion">📦 Hidden Surprise</button>
   <div class="panel"><p>Wanna know somthing , don't u think bracelet box doesn't exactly fit? Like ho skta hai niche kuch ho. Remove the padding(its glued btw) and check the bottom of the box, there's a surprise for u🤫😁.
@@ -208,6 +235,21 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
+    const sticker = document.getElementById('birthdaySticker');
+
+  sticker.addEventListener('click', () => {
+    // small pop animation
+    sticker.style.transform = 'scale(1.2)';
+    setTimeout(() => { sticker.style.transform = 'scale(1)'; }, 200);
+
+    // trigger confetti
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+      emojis: ['🎂', '🎉', '🍰', '🥳'] // cake + birthday emojis
+    });
+  });
 
  const memories = [
   {img:"images/poto1.jpg", caption:"World war 3 ❌  Sticker war✅"},
