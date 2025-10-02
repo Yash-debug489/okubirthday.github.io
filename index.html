@@ -601,8 +601,8 @@ const board = Array(9).fill("");
 let currentPlayer = "X";
 let gameActive = true;
 
-const xImg = "images/x.png"; // your X image path
-const oImg = "images/o.png"; // your O image path
+const xImg = "images/x.jpg"; // your X image path
+const oImg = "images/o.jpg"; // your O image path
 
 const tttCells = document.querySelectorAll(".ttt-cell");
 const resultDiv = document.getElementById("tttResult");
@@ -650,7 +650,17 @@ function makeMove(index){
   renderBoard();
 
   let winner = checkWin(board);
-  if(winner){ resultDiv.innerText = winner==="Draw"?"It's a Draw!":`${winner} Wins!`; gameActive=false; return; }
+  if(winner){ 
+    if(winner === "X"){
+        resultDiv.innerText = "Yash Wins!Hehe🎉"; // Your custom message
+    } else if(winner === "O"){
+        resultDiv.innerText = "Shruti Wins!😜";
+    } else {
+        resultDiv.innerText = "It's a Draw!";
+    }
+    gameActive = false; 
+    return; 
+}
 
   if(currentPlayer==="X" && modeSelect.value!=="offline"){
     currentPlayer="O";
