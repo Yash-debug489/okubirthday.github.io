@@ -292,7 +292,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
       <select id="gameMode">
         <option value="offline">2player for u and ur sister</option>
         <option value="easy">Computer Easy(bina dimag wala)</option>
-        <option value="hard">Computer (Dimag wala)</option>
+        <option value="hard">Computer(Thoda dimag wala)</option>
       </select>
     </div>
     
@@ -367,9 +367,12 @@ Agge ka check krne ke baad hi padhna.</p></div>
   <div id="heartGameContainer" style="position:relative; width:300px; height:400px; margin:0 auto; border:2px solid #ff6b6b; border-radius:10px; overflow:hidden; background:#fff;">
     <div id="basket" style="position:absolute; bottom:10px; left:130px; width:40px; height:40px; background:#ff6b6b; border-radius:10px;"></div>
     <p id="heartScore" style="position:absolute; top:10px; left:10px; font-weight:bold;">Score: 0</p>
+    <!-- Add reset button inside the container -->
+    <button id="heartReset" style="position:absolute; bottom:10px; right:10px; padding:5px 10px; background:#ff6b6b; color:#fff; border:none; border-radius:5px; cursor:pointer;">Reset</button>
   </div>
   <p id="heartResult" style="font-weight:bold; margin-top:10px; color:#ff6b6b;"></p>
 </div>
+
 
 
 
@@ -410,12 +413,13 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
-  // Catch the Falling Hearts Game (Fixed + Mobile Friendly)
+  // Catch the Falling Hearts Game (Fixed + Mobile Friendly + Reset)
 (function(){
   const container = document.getElementById("heartGameContainer");
   const basket = document.getElementById("basket");
   const scoreDisplay = document.getElementById("heartScore");
   const resultDisplay = document.getElementById("heartResult");
+  const resetBtn = document.getElementById("heartReset"); // Reset button
 
   let basketX = 130;
   const basketWidth = 40;
@@ -505,7 +509,31 @@ Agge ka check krne ke baad hi padhna.</p></div>
     if(gameActive) createHeart();
     else clearInterval(heartSpawner);
   }, 1000);
+
+  // Reset button functionality
+  resetBtn.addEventListener("click", ()=>{
+    // Reset variables
+    score = 0;
+    basketX = 130;
+    moveBasket(basketX);
+    scoreDisplay.innerText = "Score: " + score;
+    resultDisplay.innerText = "";
+    gameActive = true;
+
+    // Remove all existing hearts
+    hearts.forEach(h => h.remove());
+    hearts = [];
+
+    // Restart heart spawning
+    setInterval(()=>{
+      if(gameActive) createHeart();
+    }, 1000);
+  });
 })();
+
+ 
+  
+
 
   // ========== Truth or Dare ==========
 const truthBtn = document.getElementById("truthBtn");
