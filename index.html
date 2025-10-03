@@ -6,6 +6,26 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  #musicToggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+#musicToggle:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.3);
+}
   .floating-balloons {
   position: fixed;
   top: 0;
@@ -105,7 +125,7 @@
 
   .theme-toggle {
     position: fixed;
-    top: 20px;
+    top: 70px;
     right: 20px;
     padding: 10px 20px;
     border: none;
@@ -217,6 +237,10 @@
 </head>
 <body>
   <div class="floating-balloons"></div>
+  <button id="musicToggle">🔊 Play Music</button>
+<audio id="bgMusic" loop>
+  <source src="images/music.mp3" type="audio/mpeg">
+</audio>
 <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 
 <div class="card">
@@ -565,6 +589,21 @@ Agge ka check krne ke baad hi padhna.</p></div>
     }, 1000);
   });
 })();
+
+  const music = document.getElementById("bgMusic");
+const toggleBtn = document.getElementById("musicToggle");
+let isPlaying = false;
+
+toggleBtn.addEventListener("click", () => {
+  if (isPlaying) {
+    music.pause();
+    toggleBtn.textContent = "🔊 Play Music";
+  } else {
+    music.play();
+    toggleBtn.textContent = "🔈 Pause Music";
+  }
+  isPlaying = !isPlaying;
+});
 
  
   
