@@ -418,6 +418,22 @@ Agge ka check krne ke baad hi padhna.</p></div>
 
 <!-- Prize Meaning -->
 <p id="wheelMeaning" style="margin-top:5px; font-style:italic; color:#555;"></p>
+  <!-- Hidden Easter Egg Popup -->
+  <div id="hiddenMessage" style="
+      display:none;
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%, -50%);
+      background: rgba(255,255,255,0.95);
+      border-radius:15px;
+      padding:20px;
+      text-align:center;
+      box-shadow:0 0 20px rgba(0,0,0,0.3);
+      z-index:10;
+      max-width:80%;
+      font-weight:bold;
+  "></div>
 </div>
 <button class="accordion">🎮 Tic Tac Toe(SY version)</button>
 <div class="panel" style="text-align:center; padding:20px;">
@@ -958,6 +974,41 @@ spinBtn.addEventListener('click', () => {
     spinning = false; // allow next spin
     wheel.removeEventListener('transitionend', handler);
   });
+  // Easter egg interaction for multiple prizes
+const hiddenMessage = document.getElementById('hiddenMessage');
+const closeHidden = document.getElementById('closeHidden');
+
+// Map prize meanings to hidden messages
+const hiddenMessages = {
+  'Japan trip': '✈️ Since this is the japan trip one , let me tell u something ILOVEU',
+  'Party by me🥳': '🎉 Surprise! Jarur let us meet',
+  'Make a wish 🌠': '🌟 Magical wishes await you! 💫'
+};
+
+meaningDisplay.addEventListener('click', () => {
+  const msg = hiddenMessages[meaningDisplay.innerText];
+  if (msg) {
+    hiddenMessage.innerHTML = `${msg}<br><br>
+      <button id="closeHidden" style="
+        margin-top:10px;
+        padding:5px 10px;
+        border-radius:10px;
+        border:none;
+        background:#ff6b6b;
+        color:white;
+        cursor:pointer;
+        font-weight:bold;
+      ">Close</button>`;
+    
+    // Show the popup
+    hiddenMessage.style.display = 'block';
+
+    // Re-attach close button listener
+    document.getElementById('closeHidden').addEventListener('click', () => {
+      hiddenMessage.style.display = 'none';
+    });
+  }
+});
 });
     const sticker = document.getElementById('birthdaySticker');
 
