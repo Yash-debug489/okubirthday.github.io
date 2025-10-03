@@ -590,9 +590,12 @@ Agge ka check krne ke baad hi padhna.</p></div>
   });
 })();
 
-  const music = document.getElementById("bgMusic");
+const music = document.getElementById("bgMusic");
 const toggleBtn = document.getElementById("musicToggle");
 let isPlaying = false;
+
+// Lower the volume to 30%
+music.volume = 0.3;
 
 toggleBtn.addEventListener("click", () => {
   if (isPlaying) {
@@ -604,7 +607,6 @@ toggleBtn.addEventListener("click", () => {
   }
   isPlaying = !isPlaying;
 });
-
  
   
 
