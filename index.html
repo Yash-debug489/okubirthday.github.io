@@ -311,7 +311,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
       Mode: 
       <select id="gameMode">
         <option value="offline">2player for u and ur sister</option>
-        <option value="easy">Computer Easy(bina dimag wala)</option>
+        <option value="easy">Reverse Tic-Tac-Toe(objective is to lose)</option>
         <option value="hard">Computer(Thoda dimag wala)</option>
       </select>
     </div>
@@ -643,77 +643,128 @@ const tttCells = document.querySelectorAll(".ttt-cell");
 const resultDiv = document.getElementById("tttResult");
 const resetBtn = document.getElementById("tttReset");
 const modeSelect = document.getElementById("gameMode");
+const modeInfo = document.getElementById("modeInfo"); // info text div
 
-function checkWin(bd){
+function checkWin(bd) {
   const winCombos = [
     [0,1,2],[3,4,5],[6,7,8],
     [0,3,6],[1,4,7],[2,5,8],
     [0,4,8],[2,4,6]
   ];
-  for(let combo of winCombos){
+  for (let combo of winCombos) {
     const [a,b,c] = combo;
-    if(bd[a] && bd[a]===bd[b] && bd[a]===bd[c]) return bd[a];
+    if (bd[a] && bd[a] === bd[b] && bd[a] === bd[c]) return bd[a];
   }
   return bd.includes("") ? null : "Draw";
 }
 
-function renderBoard(){
-  tttCells.forEach((cell,i)=>{
-    cell.innerHTML = board[i]==="X"?`<img src="${xImg}">`:
-                     board[i]==="O"?`<img src="${oImg}">`:"";
+function renderBoard() {
+  tttCells.forEach((cell,i) => {
+    cell.innerHTML = board[i] === "X" ? `<img src="${xImg}">` :
+                     board[i] === "O" ? `<img src="${oImg}">` : "";
   });
 }
 
-function computerMoveEasy(){
+function computerMoveEasy() {
   let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
   return empty[Math.floor(Math.random()*empty.length)];
 }
 
-function computerMoveHard(){
+function computerMoveHard() {
   let empty = board.map((v,i)=>v===""?i:null).filter(v=>v!==null);
   // 1. Win
-  for(let i of empty){ let copy=[...board]; copy[i]="O"; if(checkWin(copy)==="O") return i; }
+  for (let i of empty) { 
+    let copy=[...board]; 
+    copy[i]="O"; 
+    if (checkWin(copy)==="O") return i; 
+  }
   // 2. Block
-  for(let i of empty){ let copy=[...board]; copy[i]="X"; if(checkWin(copy)==="X") return i; }
+  for (let i of empty) { 
+    let copy=[...board]; 
+    copy[i]="X"; 
+    if (checkWin(copy)==="X") return i; 
+  }
   // 3. Random
   return empty[Math.floor(Math.random()*empty.length)];
 }
 
-function makeMove(index){
-  if(!gameActive || board[index] !== "") return;
+function makeMove(index) {
+  if (!gameActive || board[index] !== "") return;
   board[index] = currentPlayer;
   renderBoard();
 
   let winner = checkWin(board);
-  if(winner){ 
-    if(winner === "X"){
-        resultDiv.innerText = "Yash Wins!Hehe🎉"; // Your custom message
-    } else if(winner === "O"){
-        resultDiv.innerText = "Shruti Wins!😜";
-    } else {
+
+  if (winner) { 
+    if (modeSelect.value === "easy") { 
+      // Reverse mode: whoever makes 3 in a row loses
+      if (winner === "X") {
+        resultDiv.innerText = "Yash Loses (Reverse Mode)! 😜";
+      } else if (winner === "O") {
+        resultDiv.innerText = "Shruti Loses (Reverse Mode)! 😜";
+      } else {
         resultDiv.innerText = "It's a Draw!";
+      }
+    } else {
+      // Normal mode
+      if (winner === "X") {
+        resultDiv.innerText = "Yash Wins! Hehe 🎉"; 
+      } else if (winner === "O") {
+        resultDiv.innerText = "Shruti Wins! 😜";
+      } else {
+        resultDiv.innerText = "It's a Draw!";
+      }
     }
     gameActive = false; 
     return; 
-}
+  }
 
-  if(currentPlayer==="X" && modeSelect.value!=="offline"){
-    currentPlayer="O";
-    let compIndex = modeSelect.value==="easy"?computerMoveEasy():computerMoveHard();
-    board[compIndex]="O";
+  if (currentPlayer === "X" && modeSelect.value !== "offline") {
+    currentPlayer = "O";
+    let compIndex = modeSelect.value === "easy" ? computerMoveEasy() : computerMoveHard();
+    board[compIndex] = "O";
     renderBoard();
     winner = checkWin(board);
-    if(winner){ resultDiv.innerText = winner==="Draw"?"It's a Draw!":`${winner} Wins!`; gameActive=false; return; }
-    currentPlayer="X";
-  } else { currentPlayer = currentPlayer==="X"?"O":"X"; }
+
+    if (winner) { 
+      if (modeSelect.value === "easy") { 
+        if (winner === "X") {
+          resultDiv.innerText = "Yash Loses (Reverse Mode)! 😜";
+        } else if (winner === "O") {
+          resultDiv.innerText = "Shruti Loses (Reverse Mode)! 😜";
+        } else {
+          resultDiv.innerText = "It's a Draw!";
+        }
+      } else {
+        resultDiv.innerText = winner === "Draw" ? "It's a Draw!" : `${winner} Wins!`; 
+      }
+      gameActive = false; 
+      return; 
+    }
+    currentPlayer = "X";
+  } else { 
+    currentPlayer = currentPlayer === "X" ? "O" : "X"; 
+  }
 }
 
-tttCells.forEach((cell,i)=>cell.addEventListener("click",()=>makeMove(i)));
+tttCells.forEach((cell,i) => cell.addEventListener("click", () => makeMove(i)));
 
-resetBtn.addEventListener("click", ()=>{
-  board.fill(""); renderBoard(); resultDiv.innerText=""; gameActive=true; currentPlayer="X";
+resetBtn.addEventListener("click", () => {
+  board.fill(""); 
+  renderBoard(); 
+  resultDiv.innerText=""; 
+  gameActive=true; 
+  currentPlayer="X";
 });
 
+// Mode info text
+modeSelect.addEventListener("change", () => {
+  if (modeSelect.value === "easy") {
+    modeInfo.innerText = "Reverse Tic Tac Toe: Try NOT to win!";
+  } else {
+    modeInfo.innerText = "";
+  }
+});
 
 
 
