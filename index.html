@@ -6,6 +6,33 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  .floating-balloons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1; /* keeps them behind your card */
+  pointer-events: none; /* so clicks go through */
+}
+
+.balloon {
+  position: absolute;
+  bottom: -150px;
+  width: 40px;
+  height: 50px;
+  background: radial-gradient(circle at 30% 30%, #ff9a9e, #fad0c4);
+  border-radius: 50% 50% 50% 50%;
+  opacity: 0.8;
+  animation: floatUp 12s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 0.9; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-110vh) scale(1.1); opacity: 0; }
+}
   /* Hearts style */
 .fallingHeart {
   position: absolute;
@@ -189,6 +216,7 @@
 </style>
 </head>
 <body>
+  <div class="floating-balloons"></div>
 <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 
 <div class="card">
@@ -984,6 +1012,37 @@ cameraEmoji.addEventListener("click", () => {
       if(confettiParticles.length===0) clearInterval(confettiInterval);
     }, 20);
   }
+
+function createBalloon() {
+  const balloon = document.createElement("div");
+  balloon.classList.add("balloon");
+
+  // random size
+  const size = Math.random() * 30 + 30; // 30px–60px
+  balloon.style.width = size + "px";
+  balloon.style.height = size * 1.2 + "px";
+
+  // random color
+  const colors = ["#ff9a9e", "#fad0c4", "#fbc2eb", "#a1c4fd", "#c2e9fb"];
+  balloon.style.background = `radial-gradient(circle at 30% 30%, ${colors[Math.floor(Math.random()*colors.length)]}, #fff)`;
+
+  // random horizontal position
+  balloon.style.left = Math.random() * 100 + "vw";
+
+  // random speed
+  balloon.style.animationDuration = (8 + Math.random() * 8) + "s";
+
+  document.querySelector(".floating-balloons").appendChild(balloon);
+
+  // remove after floating out
+  setTimeout(() => balloon.remove(), 15000);
+}
+
+// keep generating balloons
+setInterval(createBalloon, 800);
+
+
+  
 </script>
 </body>
 </html>
