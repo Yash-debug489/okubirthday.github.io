@@ -6,6 +6,62 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  /* Pop-up overlay */
+#popupIntro {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255, 192, 203, 0.95); /* soft pink overlay */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000; /* above everything else */
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+/* Pop-up content */
+#popupContent {
+  text-align: center;
+  background: white;
+  padding: 30px 50px;
+  border-radius: 25px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  animation: popupBounce 1s ease;
+}
+
+#popupContent h1 {
+  font-size: 2rem;
+  color: #ff6b6b;
+  margin-bottom: 15px;
+}
+
+#popupContent p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+#popupContent button {
+  padding: 10px 25px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 20px;
+  background: #ff6b6b;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.2s;
+}
+
+#popupContent button:hover { transform: scale(1.1); }
+
+/* Bounce animation */
+@keyframes popupBounce {
+  0% { transform: scale(0.5); opacity:0; }
+  60% { transform: scale(1.1); opacity:1; }
+  100% { transform: scale(1); }
+}
   #musicToggle {
   position: fixed;
   top: 60px;
@@ -236,6 +292,15 @@
 </style>
 </head>
 <body>
+  <!-- Pop-up Intro -->
+<div id="popupIntro">
+  <div id="popupContent">
+    <h1>Happy Birthday Okuu! 💖</h1>
+    <p>This is ur website- a tiny world i created.🎁</p>
+    <p>A special gift for u to add some sparkle to ur day🐣❤️</p>
+    <button id="enterBtn">✨ Dive in ✨</button>
+  </div>
+</div>
   <div class="floating-balloons"></div>
   <button id="musicToggle">🔊 Play Music</button>
 <audio id="bgMusic" loop>
@@ -472,6 +537,13 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <canvas id="confetti"></canvas>
 
 <script>
+  const popup = document.getElementById("popupIntro");
+const enterBtn = document.getElementById("enterBtn");
+
+enterBtn.addEventListener("click", () => {
+  popup.style.opacity = "0";
+  setTimeout(() => { popup.style.display = "none"; }, 800);
+});
   // Catch the Falling Hearts Game (Fixed + Mobile Friendly + Reset)
 (function(){
   const container = document.getElementById("heartGameContainer");
