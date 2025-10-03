@@ -282,7 +282,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
 <!-- Prize Meaning -->
 <p id="wheelMeaning" style="margin-top:5px; font-style:italic; color:#555;"></p>
 </div>
-<button class="accordion">🎮 Tic Tac Toe</button>
+<button class="accordion">🎮 Tic Tac Toe(SY version😉)</button>
 <div class="panel" style="text-align:center; padding:20px;">
   
   <div id="tttContainer">
@@ -361,13 +361,13 @@ Agge ka check krne ke baad hi padhna.</p></div>
   </div>
 </div>
   <!-- Catch the Falling Hearts Game Accordion -->
-<button class="accordion">💘 Catch the Hearts</button>
+<button class="accordion">💘catch my Heart</button>
 <div class="panel" style="text-align:center; padding:20px;">
   <p>Move the basket with ⬅️ and ➡️ keys or swipe on mobile to catch the falling hearts ❤️</p>
   <div id="heartGameContainer" style="position:relative; width:300px; height:400px; margin:0 auto; border:2px solid #ff6b6b; border-radius:10px; overflow:hidden; background:#fff;">
     <div id="basket" style="position:absolute; bottom:10px; left:130px; width:40px; height:40px; background:#ff6b6b; border-radius:10px;"></div>
     <p id="heartScore" style="position:absolute; top:10px; left:10px; font-weight:bold;">Score: 0</p>
-    <!-- Add reset button inside the container -->
+    <!-- Add reset button inside the contahhiner -->
     <button id="heartReset" style="position:absolute; bottom:10px; right:10px; padding:5px 10px; background:#ff6b6b; color:#fff; border:none; border-radius:5px; cursor:pointer;">Reset</button>
   </div>
   <p id="heartResult" style="font-weight:bold; margin-top:10px; color:#ff6b6b;"></p>
@@ -426,7 +426,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
   let score = 0;
   let hearts = [];
   let gameActive = true;
-  const maxScore = 7; // Winning condition
+  const maxScore = 18; // Winning condition
 
   // Move basket with arrow keys
   function moveBasket(x){
@@ -487,7 +487,7 @@ Agge ka check krne ke baad hi padhna.</p></div>
 
           // Check win
           if(score >= maxScore){
-            resultDisplay.innerText = "💖 Tumne mere itne sare dil chura liya, now ur in love with me! ";
+            resultDisplay.innerText = "💖Happy 18th birthday!🫠";
             gameActive = false;
             hearts.forEach(h=>h.remove());
             hearts=[];
@@ -548,21 +548,21 @@ const nextTruth = document.getElementById("nextTruth");
 
 // Dare list
 const dares = [
-  "Send me your silliest selfie 😜",
-  "Record a 5-sec happy dance 🕺💃",
-  "Say one thing only in emojis for 1 min 📱😎",
-  "Sing your favorite line from a song 🎶",
-  "Text me a secret no one knows 😏",
-  "Do a funny pose and send a pic 🤪"
+  "send me one of ur iconic selfie with the silliest expressions ",
+  "Record a 5-sec barati dance 🕺💃",
+  "Make sounds of 3different animals😁",
+  "Sing your favorite line from chikni chameli😗",
+  "Sing me a song",
+  "Don't eat junk food for a day"
 ];
 
 // Truth prompts (personal / interactive)
 const truths = [
-  "Remember the first time we met? Describe it in 3 emojis 😄",
-  "Pick an emoji that represents me 🥰",
+  "If one day u woke up as me, What's the first embarrassing thing u would do?",
+  "If ur parents installed cctv in ur room,kaun sa act dekh ke they would be surprised?",
   "What's your happiest memory from last month? 🌸",
-  "Which song makes you think of us? 🎶",
-  "Share a cute secret no one knows 😏"
+  "What's the most embarrassing incident of ur life, jisko sochte hi cringe ajataa ho? ",
+  "If i appeared in front u right now, what would u say?Yes or No"
 ];
 
 let currentTruth = 0;
