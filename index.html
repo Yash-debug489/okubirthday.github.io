@@ -6,6 +6,18 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  .accordion.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.accordion.locked::after {
+  content: "🔒";
+  position: absolute;
+  right: 15px;
+  font-size: 1.2rem;
+}
   /* Pop-up overlay */
 #popupIntro {
   position: fixed;
@@ -340,12 +352,12 @@
   
   </div>
 
-  <button class="accordion">📦 Hidden Surprise</button>
-  <div class="panel"><p>Wanna know somthing , don't u think bracelet box doesn't exactly fit? Like ho skta hai niche kuch ho. Remove the padding(its glued btw) and check the bottom of the box, there's a surprise for u🤫😁.
+ <button class="accordion locked" data-password="SUNMOON">📦 Hidden Surprise</button>
+<div class="panel"><p>Wanna know somthing , don't u think bracelet box doesn't exactly fit? Like ho skta hai niche kuch ho. Remove the padding(its glued btw) and check the bottom of the box, there's a surprise for u🤫😁.
 Agge ka check krne ke baad hi padhna.</p></div>
 
-  <button class="accordion">💌Memories</button>
-  <div class="panel"><p>I hope u got it. Iske do piece hai[sun and moon] the second[moon] is with me. I gave u the sun because u light up my world even from a far. I think maine bas negative aspects bataye haii mere 11, 12th ke but lets lighten up the mood, u know how dull life is for a jee aspirant(especially ppl like me jo 11th se suru kiye hai), its not very happening, don't get me wrong i liked it(the thrill of solving questions , the fun in learning)..but then u came along , we again started talking in class 12 and let me tell u those calls, were a source of happiness for me..u wouldn't believe it but in class 12 around October i think i used to wait for ur call every evening and bht baar hua tha kii i didn't slept in the afternoon  not only because ki mujhe padhna haii but also kyuki if i did i would miss ur call(if u did call that day). Then the day before my JEE mains first attempt (21 January night), u called me..That time i was alone in my hotel room , in pitch darkness , the only sound being of my own heart, beating so fast i thought i would die. But then suddenly after a month(i guess) u called me , made me laugh and during the call i felt calm , i forgot mera kal JEE hai[woh alag baat hai after the call , i again wasn't able to sleep bcz of my anxiety 😂]. Ur my SUN, i hope that little keychain would remind u of me , abt how much i care abt u and how much i love u. Make sure to bring it with u the next time we meet.</p>
+ <button class="accordion locked" data-password="SUNMOON">💌 Memories</button>
+<div class="panel"><p>I hope u got it. Iske do piece hai[sun and moon] the second[moon] is with me. I gave u the sun because u light up my world even from a far. I think maine bas negative aspects bataye haii mere 11, 12th ke but lets lighten up the mood, u know how dull life is for a jee aspirant(especially ppl like me jo 11th se suru kiye hai), its not very happening, don't get me wrong i liked it(the thrill of solving questions , the fun in learning)..but then u came along , we again started talking in class 12 and let me tell u those calls, were a source of happiness for me..u wouldn't believe it but in class 12 around October i think i used to wait for ur call every evening and bht baar hua tha kii i didn't slept in the afternoon  not only because ki mujhe padhna haii but also kyuki if i did i would miss ur call(if u did call that day). Then the day before my JEE mains first attempt (21 January night), u called me..That time i was alone in my hotel room , in pitch darkness , the only sound being of my own heart, beating so fast i thought i would die. But then suddenly after a month(i guess) u called me , made me laugh and during the call i felt calm , i forgot mera kal JEE hai[woh alag baat hai after the call , i again wasn't able to sleep bcz of my anxiety 😂]. Ur my SUN, i hope that little keychain would remind u of me , abt how much i care abt u and how much i love u. Make sure to bring it with u the next time we meet.</p>
   <img src="images/key.jpg" alt="Memory" 
        style="display:block; margin:10px auto; max-width:80%; border-radius:15px;">
     <p> This cutiee, finding a permanent place in my wallet.</p>
@@ -1063,16 +1075,34 @@ cameraEmoji.addEventListener("click", () => {
 
   // Accordion
   const accordions = document.getElementsByClassName("accordion");
-  for (let i = 0; i < accordions.length; i++) {
-    accordions[i].addEventListener("click", function() {
-      this.classList.toggle("active");
-      const panel = this.nextElementSibling;
-      panel.style.display = (panel.style.display === "block") ? "none" : "block";
-      if(this.innerText.includes("Sawal jawab") && panel.style.display === "block"){
-        currentQuestion = 0; score = 0; quizResult.innerText = ""; loadQuestion();
+ for (let i = 0; i < accordions.length; i++) {
+  accordions[i].addEventListener("click", function() {
+    const panel = this.nextElementSibling;
+
+    // Check if accordion is locked
+    if (this.classList.contains("locked")) {
+      const userPassword = prompt("Enter the password to unlock this section 🔑");
+      if (userPassword === this.dataset.password) {
+        alert("🎉 Correct! You unlocked this section.");
+        this.classList.remove("locked");
+        this.style.opacity = 1;
+        panel.style.display = "block";
+      } else {
+        alert("❌ Wrong password! Get a perfect score in the quiz to find it.");
       }
-    });
-  }
+      return; // stop further toggling
+    }
+
+    // Normal accordion toggle
+    this.classList.toggle("active");
+    panel.style.display = (panel.style.display === "block") ? "none" : "block";
+
+    // Quiz refresh logic (optional)
+    if(this.innerText.includes("Sawal jawab") && panel.style.display === "block"){
+      currentQuestion = 0; score = 0; quizResult.innerText = ""; loadQuestion();
+    }
+  });
+}
 
   // Friendship Quiz
   const quizQuestions = [
@@ -1090,12 +1120,12 @@ cameraEmoji.addEventListener("click", () => {
   function loadQuestion() {
     if(currentQuestion>=quizQuestions.length){
       let message="";
-      if(score===quizQuestions.length){ message="🎉6 out of 6🥳🥳| Epic win — my gulabjamun❤️"; triggerConfetti(); }
+      if(score===quizQuestions.length){ message="🎉6 out of 6🥳🥳| Epic win — my gulabjamun❤️\nPassword: SUNMOON"; triggerConfetti(); }
       else if(score==5){ message="5 out of 6🤧🤧 |  Fantastic !"; triggerConfetti(); }
       else if(score==4){ message="4 out of 6 | I knew you’d get here eventually, bht badhiyaa😉"; triggerConfetti();}
       else if(score==3){ message="3 out of 6 | Looks like you’re trying, I’ll give you credit 😅"; triggerConfetti();}
-      else if(score==2){ message="2 out of 6 | 4 real though, you can obviously do better than this😏"; }
-      else if(score==1){ message="1 out of 6 | Seriously, i think i'll have to give u a 101 coaching👀"; }
+      else if(score==2){ message="2 out of 6 | 4 real though, you can obviously do better than this"; }
+      else if(score==1){ message="1 out of 6 | Seriously, i think i'll have to give u a 101 coaching"; }
       else{ message="0 out of 6 | Uhhh..Who hacked my bae's PC 😰..."; }
       quizContent.innerHTML=""; quizResult.innerText=message; return;
     }
