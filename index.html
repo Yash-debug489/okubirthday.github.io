@@ -6,6 +6,36 @@
 <title>For You 💖</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 <style>
+  /* Final Message Accordion Styling */
+.panel.final-message {
+  display: none;
+  background: #fff5f8;
+  text-align: center;
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  animation: fadeIn 1s ease;
+}
+
+.confession-container h2 {
+  color: #ff6b81;
+  margin-bottom: 15px;
+  font-size: 1.6rem;
+}
+
+.confession-container p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #333;
+  max-width: 500px;
+  margin: 0 auto;
+  white-space: pre-line;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
   .accordion.locked {
   opacity: 0.6;
   cursor: not-allowed;
@@ -541,6 +571,25 @@ Agge ka check krne ke baad hi padhna.</p></div>
 </div>
 
 
+    <h3 style="text-align:center; color:#ff4b5c;">💌 Final Message</h3>
+
+
+
+  <button class="accordion locked" data-password="1890">💌 Final Message</button>
+<div class="panel final-message">
+  <div class="confession-container">
+    <h2>My Heart’s Confession💖</h2>
+    <p>
+      You’ve reached the very end — after every memory, every smile, every moment we shared here.  
+      This is the part I never said out loud…  
+      <br><br>
+      <!-- 👉 Replace below text with your actual confession -->
+      I love you — truly, deeply, and quietly — and I just couldn’t pretend to be only your best friend anymore.  
+    </p>
+  </div>
+</div>
+
+
 
 
 
@@ -648,7 +697,7 @@ enterBtn.addEventListener("click", () => {
 
           // Check win
           if(score >= maxScore){
-            resultDisplay.innerText = "💖Happy 18th birthday!🫠";
+            resultDisplay.innerText = "💖Happy 18th birthday!🫠\nNumber: 18";
             gameActive = false;
             hearts.forEach(h=>h.remove());
             hearts=[];
@@ -1045,7 +1094,7 @@ meaningDisplay.addEventListener('click', () => {
   {img:"images/poto2.jpg", caption:"I want to be the sun😔"},
   {img:"images/poto3.jpg", caption:"Tumharii ankhe👀💗"},
   {img:"images/poto4.jpg", caption:"Tumhari psychopath wali ankhe👀"},
-  {img:"images/poto5.jpg", caption:"Hamarii ankhee👀"} // special one
+  {img:"images/poto5.jpg", caption:"Hamarii ankhee👀\nNumber: 15"} // special one
 ];
 
 const cameraEmoji = document.getElementById("cameraEmoji");
@@ -1077,20 +1126,26 @@ cameraEmoji.addEventListener("click", () => {
 
   // Accordion
   const accordions = document.getElementsByClassName("accordion");
- for (let i = 0; i < accordions.length; i++) {
+for (let i = 0; i < accordions.length; i++) {
   accordions[i].addEventListener("click", function() {
     const panel = this.nextElementSibling;
 
     // Check if accordion is locked
     if (this.classList.contains("locked")) {
-      const userPassword = prompt("Enter the password to unlock a secret🔑");
+
+      // 🎯 Check if it's the final message accordion
+      if (this.innerText.includes("Final Message")) {
+        alert("🔐 To unlock this final message, multiply the 3 hidden numbers:\n1️⃣ From Sawal Jawab (5/6 score)\n2️⃣ From Catch the Heart message\n3️⃣ From the last Polaroid caption(Click on the camera emoji).\n\nThen enter their product as the password.");
+      }
+
+      const userPassword = prompt("Enter the password to unlock this section 🔑");
       if (userPassword === this.dataset.password) {
         alert("🎉 Correct! You unlocked this section.");
         this.classList.remove("locked");
         this.style.opacity = 1;
         panel.style.display = "block";
       } else {
-        alert("❌ Wrong password! Get a perfect score in SAWALJAWAB to find it.");
+        alert("❌ Wrong password! Get all hints before trying again.");
       }
       return; // stop further toggling
     }
@@ -1100,8 +1155,11 @@ cameraEmoji.addEventListener("click", () => {
     panel.style.display = (panel.style.display === "block") ? "none" : "block";
 
     // Quiz refresh logic (optional)
-    if(this.innerText.includes("Sawal jawab") && panel.style.display === "block"){
-      currentQuestion = 0; score = 0; quizResult.innerText = ""; loadQuestion();
+    if (this.innerText.includes("Sawal jawab") && panel.style.display === "block") {
+      currentQuestion = 0; 
+      score = 0; 
+      quizResult.innerText = ""; 
+      loadQuestion();
     }
   });
 }
@@ -1123,7 +1181,7 @@ cameraEmoji.addEventListener("click", () => {
     if(currentQuestion>=quizQuestions.length){
       let message="";
       if(score===quizQuestions.length){ message="🎉6 out of 6🥳🥳| Epic win — my gulabjamun❤️\nPassword: SUNMOON"; triggerConfetti(); }
-      else if(score==5){ message="5 out of 6🤧🤧 |  Fantastic !"; triggerConfetti(); }
+      else if(score==5){ message="5 out of 6🤧🤧 |  Fantastic !\nNumber: 7"; triggerConfetti(); }
       else if(score==4){ message="4 out of 6 | I knew you’d get here eventually, bht badhiyaa😉"; triggerConfetti();}
       else if(score==3){ message="3 out of 6 | Looks like you’re trying, I’ll give you credit 😅"; triggerConfetti();}
       else if(score==2){ message="2 out of 6 | 4 real though, you can obviously do better than this"; }
