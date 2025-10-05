@@ -356,15 +356,16 @@
   <h1>Happy Birthday Okuu 💫</h1>
 
   <button class="accordion">🎉 Birthday wishes</button>
-  <div class="panel"><p>Happy birthday Bestie 🥳🥳💞. Wase the word OKU in japanese means the inner or deep part of something and calling u OKU means ur my "Inner person" , someone very close to my heart.Happy birthday yrr tum hamesa
-    khush raho , ur so adorable , so so cute..Just be happy,stay calm.U can count on me I'm 
+  <div class="panel"><p>Happy birthday Shrutii🥳🥳💞. Wase the word OKU in japanese means the inner or deep part of something and calling u OKU means ur my "Inner person" , someone very close to my heart.Happy birthday yrr, enjoy ur day,i wish tum hamesa
+    khush raho , ur so adorable , so so cute, becoming gol matol too🤭🤭...Wase u can count on me I'm 
     always here, whenever u feel like it call me,  text me , blast my phone , teri marji [wase i know u already do this, batane ka jarurat nii hai] ..I love u so so much🫂🫂..
     This gift is my effort to put a smile on ur face and to make u feel special which i
     hopped i did. I hope safely reach kr gyaa hoo, wase i couriered it on 30 September because i feared late na ho jaye , 
     kyuki beech me sat , sun tha and also festive season so i spent the whole night of 29sep making this because i really wanted to make something special,
-    u mean a lot to me, love u bae🥹🥹.It's ur 18th birthday and tumhari phutti kismat toh dekho next day test🥲🥲. I hope padh li ho , ur chill nd serious now, right? That's my girl.</p>
+    u mean a lot to me, love u bae🥹🥹...It's ur 18th birthday and tumhari phutti kismat toh dekho next day test🥲🥲. I hope padh li ho , ur chill nd serious now, right? That's my girl.Wase jitna i can guess 6oct ko
+  ur reading this because 4oct ko delay hoga[my future prediction, as im writing this on 1oct]</p>
     <p>   </p>
-    <p>Wase click kr ke dekh niche button ko</p>
+    <p>Wase the bottom button wants to be touched by u</p>
      <div id="birthdaySticker" style="
       display:inline-block;
       background: #ff6b6b;
@@ -377,7 +378,7 @@
       margin-top:15px;
       transition: transform 0.2s;
   ">
-    🎉 Happy Birthday! 🎉
+    🎉 Happy Birthday!(Touch me pls🥹🥹) 🎉
   </div>
   
   
@@ -1046,7 +1047,7 @@ const closeHidden = document.getElementById('closeHidden');
 const hiddenMessages = {
   'Japan trip': '✈️ Jarur yrr',
   'Party by me🥳': '🎉 Surprise! Jarur let us meet',
-  'Make a wish 🌠': '🌟 Magical wishes await you! 💫'
+  'Make a wish 🌠': '🌟 Batao kya chahiye💫'
 };
 
 meaningDisplay.addEventListener('click', () => {
@@ -1134,7 +1135,12 @@ for (let i = 0; i < accordions.length; i++) {
     // Check if accordion is locked
     if (this.classList.contains("locked")) {
 
-      // 🎯 Check if it's the final message accordion
+      // 🎯 Custom alert for the last two locked accordions
+      if (this.innerText.includes("Hidden Surprise") || this.innerText.includes("Memories")) {
+        alert("🔐 To unlock this section, you need to get 6/6 score in Sawal Jawab! 📝");
+      }
+
+      // Final message logic
       if (this.innerText.includes("Final Message")) {
         alert("🔐 To unlock this final message, multiply the 3 hidden numbers:\n1️⃣ From Sawal Jawab (5/6 score)\n2️⃣ From Catch the Heart message\n3️⃣ From the last Polaroid caption(Click on the camera emoji).\n\nThen enter their product as the password.");
       }
