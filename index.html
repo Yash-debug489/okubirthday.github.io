@@ -566,16 +566,19 @@ Agge ka check krne ke baad hi padhna.</p></div>
     <button id="nextTruth" class="quizOption" style="display:none;">Next</button>
   </div>
 </div>
-  <!-- Catch the Falling Hearts Game Accordion -->
-<button class="accordion">💘catch my Heart</button>
+ <button class="accordion">💘 Catch my Heart</button>
 <div class="panel" style="text-align:center; padding:20px;">
   <p>Move the basket with ⬅️ and ➡️ keys or swipe on mobile to catch the falling hearts ❤️</p>
+
+  <!-- Game Container -->
   <div id="heartGameContainer" style="position:relative; width:300px; height:400px; margin:0 auto; border:2px solid #ff6b6b; border-radius:10px; overflow:hidden; background:#fff;">
     <div id="basket" style="position:absolute; bottom:10px; left:130px; width:40px; height:40px; background:#ff6b6b; border-radius:10px;"></div>
     <p id="heartScore" style="position:absolute; top:10px; left:10px; font-weight:bold;">Score: 0</p>
-    <!-- Add reset button inside the contahhiner -->
-    <button id="heartReset" style="position:absolute; bottom:10px; right:10px; padding:5px 10px; background:#ff6b6b; color:#fff; border:none; border-radius:5px; cursor:pointer;">Reset</button>
+
+    <!-- Start/Restart Button -->
+    <button id="heartStart" style="position:absolute; bottom:10px; right:10px; padding:5px 10px; background:#ff6b6b; color:#fff; border:none; border-radius:5px; cursor:pointer;">Start</button>
   </div>
+
   <p id="heartResult" style="font-weight:bold; margin-top:10px; color:#ff6b6b;"></p>
 </div>
 
@@ -642,20 +645,20 @@ enterBtn.addEventListener("click", () => {
   popup.style.opacity = "0";
   setTimeout(() => { popup.style.display = "none"; }, 800);
 });
-  // Catch the Falling Hearts Game (Fixed + Mobile Friendly + Reset)
-(function(){
+  (function(){
   const container = document.getElementById("heartGameContainer");
   const basket = document.getElementById("basket");
   const scoreDisplay = document.getElementById("heartScore");
   const resultDisplay = document.getElementById("heartResult");
-  const resetBtn = document.getElementById("heartReset"); // Reset button
+  const startBtn = document.getElementById("heartStart");
 
   let basketX = 130;
   const basketWidth = 40;
   let score = 0;
   let hearts = [];
-  let gameActive = true;
-  const maxScore = 18; // Winning condition
+  let gameActive = false;
+  const maxScore = 18;
+  let heartSpawner = null; // control interval
 
   // Move basket with arrow keys
   function moveBasket(x){
@@ -663,17 +666,16 @@ enterBtn.addEventListener("click", () => {
     basket.style.left = basketX + "px";
   }
 
+  // Keyboard controls
   window.addEventListener("keydown", (e)=>{
     if(!gameActive) return;
-    if(e.key === "ArrowLeft"){ moveBasket(basketX - 20); }
-    if(e.key === "ArrowRight"){ moveBasket(basketX + 20); }
+    if(e.key === "ArrowLeft") moveBasket(basketX - 20);
+    if(e.key === "ArrowRight") moveBasket(basketX + 20);
   });
 
-  // Mobile touch controls (drag basket)
+  // Touch controls
   let touchStartX = null;
-  container.addEventListener("touchstart", (e)=>{
-    touchStartX = e.touches[0].clientX;
-  });
+  container.addEventListener("touchstart", (e)=>{ touchStartX = e.touches[0].clientX; });
   container.addEventListener("touchmove", (e)=>{
     if(!gameActive || touchStartX === null) return;
     const touchX = e.touches[0].clientX;
@@ -689,24 +691,28 @@ enterBtn.addEventListener("click", () => {
     if(!gameActive) return;
     const heart = document.createElement("div");
     heart.classList.add("fallingHeart");
-    heart.style.left = Math.floor(Math.random()*260) + "px";
-    heart.style.top = "-30px"; // start from top
+    heart.style.left = Math.floor(Math.random() * 260) + "px";
+    heart.style.top = "-30px";
     heart.innerText = "❤️";
     container.appendChild(heart);
     hearts.push(heart);
 
-    // Animate
-    let fallInterval = setInterval(()=>{
-      if(!gameActive){ clearInterval(fallInterval); heart.remove(); return; }
+    const fallInterval = setInterval(()=>{
+      if(!gameActive){
+        clearInterval(fallInterval);
+        heart.remove();
+        return;
+      }
+
       const heartTop = parseInt(heart.style.top);
       heart.style.top = (heartTop + 5) + "px";
 
-      // Check collision with basket
       const heartLeft = parseInt(heart.style.left);
       const heartRight = heartLeft + 24;
       const basketRight = basketX + basketWidth;
 
-      if(heartTop + 24 >= 370 && heartTop + 24 <= 410){ // near bottom
+      // Collision
+      if(heartTop + 24 >= 370 && heartTop + 24 <= 410){
         if(heartRight > basketX && heartLeft < basketRight){
           score++;
           scoreDisplay.innerText = "Score: " + score;
@@ -714,17 +720,14 @@ enterBtn.addEventListener("click", () => {
           clearInterval(fallInterval);
           hearts = hearts.filter(h => h !== heart);
 
-          // Check win
           if(score >= maxScore){
             resultDisplay.innerText = "💖Happy 18th birthday!🫠\nNumber: 18";
-            gameActive = false;
-            hearts.forEach(h=>h.remove());
-            hearts=[];
+            stopGame();
           }
         }
       }
 
-      // Remove if it falls below
+      // Missed heart
       if(heartTop > 400){
         heart.remove();
         clearInterval(fallInterval);
@@ -733,30 +736,33 @@ enterBtn.addEventListener("click", () => {
     }, 50);
   }
 
-  // Spawn hearts every 1 second
-  const heartSpawner = setInterval(()=>{
-    if(gameActive) createHeart();
-    else clearInterval(heartSpawner);
-  }, 1000);
-
-  // Reset button functionality
-  resetBtn.addEventListener("click", ()=>{
-    // Reset variables
+  // Start / Restart Game
+  function startGame(){
+    stopGame(); // ensure clean start
     score = 0;
+    scoreDisplay.innerText = "Score: 0";
+    resultDisplay.innerText = "";
     basketX = 130;
     moveBasket(basketX);
-    scoreDisplay.innerText = "Score: " + score;
-    resultDisplay.innerText = "";
+    hearts.forEach(h=>h.remove());
+    hearts = [];
     gameActive = true;
 
-    // Remove all existing hearts
+    heartSpawner = setInterval(()=>{ if(gameActive) createHeart(); }, 1000);
+  }
+
+  // Stop Game
+  function stopGame(){
+    gameActive = false;
+    clearInterval(heartSpawner);
     hearts.forEach(h => h.remove());
     hearts = [];
+  }
 
-    // Restart heart spawning
-    setInterval(()=>{
-      if(gameActive) createHeart();
-    }, 1000);
+  // Start button functionality
+  startBtn.addEventListener("click", ()=>{
+    startGame();
+    startBtn.innerText = "Restart";
   });
 })();
 
